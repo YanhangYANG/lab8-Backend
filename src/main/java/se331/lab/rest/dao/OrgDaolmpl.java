@@ -1,6 +1,10 @@
 package se331.lab.rest.dao;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import se331.lab.rest.entity.Org;
 
@@ -8,6 +12,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Repository
+@Profile("manual")
 public class OrgDaolmpl implements OrgDao {
 
     List<Org> orgList;
@@ -80,11 +85,11 @@ public class OrgDaolmpl implements OrgDao {
     }
 
     @Override
-    public List<Org> getOrgs(Integer pageSize, Integer page) {
+    public Page<Org> getOrgs(Integer pageSize, Integer page) {
         pageSize = pageSize == null ? orgList.size() : pageSize;
         page = page == null ? 1 : page;
         int firstIndex = pageSize * (page - 1);
-        return orgList.subList(firstIndex, firstIndex + pageSize );
+        return new PageImpl<>(orgList.subList(firstIndex, firstIndex + pageSize), PageRequest.of(page, pageSize), orgList.size());
     }
 
     @Override
@@ -93,6 +98,13 @@ public class OrgDaolmpl implements OrgDao {
                 .filter(org -> org.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public Org save(Org org) {
+        org.setId(orgList.get(orgList.size() - 1).getId() + 1);
+        orgList.add(org);
+        return org;
     }
 
 }
