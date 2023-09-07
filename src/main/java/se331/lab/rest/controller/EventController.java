@@ -6,9 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import se331.lab.rest.entity.Event;
 
@@ -25,10 +23,10 @@ public class EventController {
     @GetMapping("events")
     public ResponseEntity<?> getEventLists(@RequestParam(value = "_limit", required = false) Integer perPage
             , @RequestParam(value = "_page", required = false) Integer page) {
-        Page<Event> pageoutput = eventService.getEvents(perPage, page);
+        Page<Event> pageOutput = eventService.getEvents(perPage, page);
         HttpHeaders responseHeader = new HttpHeaders();
-        responseHeader.set("x-total-count", String.valueOf(pageoutput.getTotalElements()));
-        return new ResponseEntity<>(pageoutput.getContent(), responseHeader, HttpStatus.OK);
+        responseHeader.set("x-total-count", String.valueOf(pageOutput.getTotalElements()));
+        return new ResponseEntity<>(pageOutput.getContent(), responseHeader, HttpStatus.OK);
     }
 
     @GetMapping("events/{id}")
@@ -40,6 +38,15 @@ public class EventController {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The given id is not found");
        }
     }
+
+    @PostMapping("/events")
+    public ResponseEntity<?>
+    addEvent(@RequestBody Event event) {
+        Event output = eventService.save(event);
+        return ResponseEntity.ok(output);
+
+    }
+
 
 }
 

@@ -22,12 +22,23 @@ public class EventDaoDblmpl implements EventDao{
 
     @Override
     public Page<Event> getEvents(Integer pageSize, Integer page) {
+        if (page == null) {
+            page = 1;  // 设置默认页码为1
+        }
+        if (pageSize == null) {
+            pageSize = 10;  // 设置默认每页的记录数量为10
+        }
         return eventRepository.findAll(PageRequest.of(page - 1, pageSize));
     }
 
     @Override
     public Event getEvent(Long id) {
         return eventRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Event save(Event event) {
+        return eventRepository.save(event);
     }
 }
 

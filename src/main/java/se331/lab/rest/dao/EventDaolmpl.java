@@ -164,4 +164,11 @@ public class EventDaolmpl implements EventDao {
                     .orElse(null);
     }
 
+    @Override
+    public Event save(Event event) {
+        event.setId(eventList.get(eventList.size() - 1).getId() + 1);
+        eventList.add(event);
+        return event;
+    }
+
 }

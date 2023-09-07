@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import se331.lab.rest.dao.EventDao;
 import se331.lab.rest.entity.Event;
 
-import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,11 @@ public class EventServicelmpl implements EventService {
     @Override
     public Event getEvent(Long id) {
         return eventDao.getEvent(id);
+    }
+
+    @Override
+    public Event save(Event event) {
+        return eventDao.save(event);
     }
 
 }
